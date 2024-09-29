@@ -15,4 +15,9 @@ class Currency extends Model
         'code',
         'symbol',
     ];
+
+    public function vehicles()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
 }
