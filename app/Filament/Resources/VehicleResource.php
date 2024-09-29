@@ -23,6 +23,8 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -50,6 +52,7 @@ class VehicleResource extends Resource
                             ->required()
                             ->reactive()
                             ->live(onBlur: true)
+                            ->autocomplete(false)
                             ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
 
                         TextInput::make('slug')
@@ -58,28 +61,14 @@ class VehicleResource extends Resource
                             ->required()
                             ->unique(Vehicle::class, 'slug', fn($record) => $record),
 
-                        TextInput::make('brand'),
+                        TextInput::make('brand')
+                            ->autocomplete(false),
 
-                        TextInput::make('model'),
+                        TextInput::make('model')
+                            ->autocomplete(false),
 
-                        TextInput::make('engine'),
-
-                        TextInput::make('price_per_day')
-                            ->type('number')
-                            ->required(),
-
-                        TextInput::make('currency_id')
-                            ->integer(),
-
-                        TextInput::make('quantity'),
-
-                        Radio::make('type')
-                            ->label("Vehicle is active or in-active")
-                            ->options([
-                                "1" => 'Active',
-                                "0" => 'In Active',
-                            ])
-                            ->inline(),
+                        TextInput::make('engine')
+                            ->autocomplete(false),
 
                         Radio::make('manual_or_auto')
                             ->label("Manual or Auto")
@@ -87,16 +76,52 @@ class VehicleResource extends Resource
                                 "auto" => 'Auto',
                                 "manual" => 'Manual',
                             ])
+                            ->default("auto")
                             ->inline(),
 
-                        TextInput::make('category_id')
-                            ->integer(),
+                        Section::make('Pricing')
+                            ->description('Add the pricing details.')
+                            ->columns(2)
+                            ->schema([
+                                TextInput::make('price_per_day')
+                                    ->type('number')
+                                    ->autocomplete(false)
+                                    ->required(),
+
+                                Select::make('currency_id')
+                                    ->relationship(name: 'currency', titleAttribute: 'name')
+                                    ->searchable(['name', 'code'])
+                                    ->preload()
+                                    ->default('1')
+                                    ->native(false)
+                                    ->required(),
+                            ]),
+
+                        /*TextInput::make('quantity'),*/
+
+                        /*Radio::make('type')
+                            ->label("Vehicle is active or in-active")
+                            ->options([
+                                "1" => 'Active',
+                                "0" => 'In Active',
+                            ])
+                            ->inline(),*/
+
+                        Select::make('category_id')
+                            ->relationship(name: 'category', titleAttribute: 'title')
+                            ->searchable(['title'])
+                            ->preload()
+                            ->native(false),
 
                         TextInput::make('unique_number')
+                            ->disabled()
+                            ->dehydrated()
+                            ->default(config('therentcar.vehicle_unique_number_prefix') . uniqid())
                             ->required(),
 
                         TextInput::make('number_of_seats')
-                        ->type('number'),
+                            ->autocomplete(false)
+                            ->type('number'),
 
                         Toggle::make('status')
                             ->label("Vehicle is active or in-active")
@@ -133,6 +158,7 @@ class VehicleResource extends Resource
                     ->description('Upload images and videos for the vehicle.')
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('thumbnail')
+                            ->collection('thumbnail')
                             ->conversion('thumb'),
 
                         SpatieMediaLibraryFileUpload::make('gallery')
@@ -153,7 +179,13 @@ class VehicleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(Vehicle::query()->with('media'))
             ->columns([
+
+                ImageColumn::make('media')
+                    ->label('Thumb')
+                    ->getStateUsing(fn($record) => $record->getFirstMediaUrl('thumbnail')),
+
                 TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
@@ -166,15 +198,20 @@ class VehicleResource extends Resource
 
                 TextColumn::make('model'),
 
-                TextColumn::make('engine'),
-
                 TextColumn::make('price_per_day'),
 
-                TextColumn::make('currency_id'),
+                TextColumn::make('currency.name'),
 
-                TextColumn::make('quantity'),
+                TextColumn::make('engine'),
 
-                TextColumn::make('status'),
+                /*TextColumn::make('quantity'),*/
+
+                /*TextColumn::make('status'),*/
+
+                IconColumn::make('status')
+                    ->boolean()
+                    ->trueColor('info')
+                    ->falseColor('warning'),
 
                 TextColumn::make('short_description'),
 
@@ -182,7 +219,7 @@ class VehicleResource extends Resource
 
                 TextColumn::make('manual_or_auto'),
 
-                TextColumn::make('category_id'),
+                TextColumn::make('category.title'),
 
                 TextColumn::make('unique_number'),
 

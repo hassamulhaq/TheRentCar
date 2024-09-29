@@ -39,4 +39,9 @@ class Vehicle extends Model implements HasMedia
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function currency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
+    }
 }
