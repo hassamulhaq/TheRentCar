@@ -10,7 +10,7 @@ class CurrencySeeder extends Seeder
     public function run(): void
     {
         $currencies = [
-            ['name' => 'United Arab Emigrates', 'code' => 'AED', 'symbol' => 'د.إ'],
+            ['name' => 'United Arab Emanates', 'code' => 'AED', 'symbol' => 'د.إ'],
             ['name' => 'US Dollar', 'code' => 'USD', 'symbol' => '$'],
             ['name' => 'Euro', 'code' => 'EUR', 'symbol' => '€'],
             ['name' => 'British Pound', 'code' => 'GBP', 'symbol' => '£'],
