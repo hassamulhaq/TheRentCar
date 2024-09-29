@@ -11,7 +11,6 @@ class Currency extends Model
     use SoftDeletes, HasFactory;
 
     protected $fillable = [
-        'title',
         'name',
         'code',
         'symbol',

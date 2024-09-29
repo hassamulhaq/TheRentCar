@@ -34,7 +34,6 @@ class CurrencyResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title'),
 
                 TextInput::make('name')
                     ->required(),
@@ -62,10 +61,6 @@ class CurrencyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->searchable()
-                    ->sortable(),
-
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
@@ -111,6 +106,6 @@ class CurrencyResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['title', 'name'];
+        return ['name'];
     }
 }
