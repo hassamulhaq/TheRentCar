@@ -31,6 +31,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
+use RalphJSmit\Filament\SEO\SEO;
 
 class VehicleResource extends Resource
 {
@@ -44,6 +45,14 @@ class VehicleResource extends Resource
     {
         return $form
             ->schema([
+
+                Section::make('SEO')
+                    ->description('Add metadata for the vehicle.')
+                    ->collapsed()
+                    ->schema([
+                        SEO::make(),
+                    ]),
+
                 Section::make('Vehicle Details')
                     ->description('Add the vehicle details.')
                     ->columns(3)
