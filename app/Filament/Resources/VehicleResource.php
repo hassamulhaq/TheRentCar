@@ -5,7 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\VehicleResource\Pages;
 use App\Models\Vehicle;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -35,46 +42,103 @@ class VehicleResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title')
-                    ->required()
-                    ->reactive()
-                    ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
+                Section::make('Vehicle Details')
+                    ->description('Add the vehicle details.')
+                    ->columns(3)
+                    ->schema([
+                        TextInput::make('title')
+                            ->required()
+                            ->reactive()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
 
-                TextInput::make('slug')
-                    ->disabled()
-                    ->required()
-                    ->unique(Vehicle::class, 'slug', fn($record) => $record),
+                        TextInput::make('slug')
+                            ->disabled()
+                            ->dehydrated()
+                            ->required()
+                            ->unique(Vehicle::class, 'slug', fn($record) => $record),
 
-                TextInput::make('brand'),
+                        TextInput::make('brand'),
 
-                TextInput::make('model'),
+                        TextInput::make('model'),
 
-                TextInput::make('engine'),
+                        TextInput::make('engine'),
 
-                TextInput::make('price_per_day')
-                    ->required(),
+                        TextInput::make('price_per_day')
+                            ->type('number')
+                            ->required(),
 
-                TextInput::make('currency_id')
-                    ->integer(),
+                        TextInput::make('currency_id')
+                            ->integer(),
 
-                TextInput::make('quantity'),
+                        TextInput::make('quantity'),
 
-                TextInput::make('status')
-                    ->required(),
+                        Radio::make('type')
+                            ->label("Vehicle is active or in-active")
+                            ->options([
+                                "1" => 'Active',
+                                "0" => 'In Active',
+                            ])
+                            ->inline(),
 
-                TextInput::make('short_description'),
+                        Radio::make('manual_or_auto')
+                            ->label("Manual or Auto")
+                            ->options([
+                                "auto" => 'Auto',
+                                "manual" => 'Manual',
+                            ])
+                            ->inline(),
 
-                TextInput::make('long_description'),
+                        TextInput::make('category_id')
+                            ->integer(),
 
-                TextInput::make('manual_or_auto'),
+                        TextInput::make('unique_number')
+                            ->required(),
 
-                TextInput::make('category_id')
-                    ->integer(),
+                        TextInput::make('number_of_seats')
+                        ->type('number'),
 
-                TextInput::make('unique_number')
-                    ->required(),
+                        Toggle::make('status')
+                            ->label("Vehicle is active or in-active")
+                            ->default('success')
+                            ->onColor('success')
+                            ->offColor('danger'),
+                    ]),
 
-                TextInput::make('number_of_seats'),
+                Section::make('Description')
+                    ->description('Add a short and long description for the vehicle.')
+                    ->schema([
+                        Textarea::make('short_description')
+                            ->columnSpanFull(),
+
+                        RichEditor::make('long_description')
+                            ->toolbarButtons([
+                                'blockquote',
+                                'bold',
+                                'bulletList',
+                                'codeBlock',
+                                'h2',
+                                'h3',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'redo',
+                                'strike',
+                                'underline',
+                                'undo',
+                            ])->columnSpanFull(),
+                    ]),
+
+                Section::make('Media')
+                    ->description('Upload images and videos for the vehicle.')
+                    ->schema([
+                        SpatieMediaLibraryFileUpload::make('thumbnail')
+                            ->conversion('thumb'),
+
+                        SpatieMediaLibraryFileUpload::make('gallery')
+                            ->multiple()
+                            ->collection('gallery'),
+                    ]),
 
                 Placeholder::make('created_at')
                     ->label('Created Date')

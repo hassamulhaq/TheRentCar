@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function vehicles(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }

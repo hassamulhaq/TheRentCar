@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Vehicle extends Model
+class Vehicle extends Model implements HasMedia
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'title',
@@ -27,4 +29,14 @@ class Vehicle extends Model
         'unique_number',
         'number_of_seats',
     ];
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
