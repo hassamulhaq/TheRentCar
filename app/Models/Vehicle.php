@@ -17,7 +17,7 @@ class Vehicle extends Model implements HasMedia
     protected $fillable = [
         'title',
         'slug',
-        'brand',
+        'brand_id',
         'model',
         'engine',
         'price_per_day',
@@ -47,9 +47,14 @@ class Vehicle extends Model implements HasMedia
         return $this->belongsTo(Currency::class);
     }
 
+    public function brand(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
     public static function searchVehicles($search)
     {
-        $query = self::query()->with('media');
+        $query = self::query()->with(['media', 'brand']);
 
         if (!empty($search)) {
             $query->where(function (Builder $query) use ($search) {

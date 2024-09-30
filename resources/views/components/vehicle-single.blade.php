@@ -42,9 +42,13 @@
             @endif
             <div>
                 <span class="tracking-tight text-slate-900 text-sm">
-                    <span>
+                    <span class="flex justify-start items-center gap-2">
                         Brand:
-                        <span class="uppercase bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ $vehicle->brand ?? 'N/A' }}</span>
+                        @if($vehicle->brand)
+                            <img loading="lazy" title="{{ $vehicle?->brand?->name ?? '' }}" width="30px" src="{{ $vehicle->brand->getFirstMediaUrl('thumbnail') }}" alt="{{ $vehicle?->brand?->name ?? '' }}">
+                        @else
+                            <span class="uppercase bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ $vehicle?->brand?->name ?? '' }}</span>
+                        @endif
                     </span>
                     {{ $vehicle->engine ?? '' }}
                 </span>
@@ -101,7 +105,8 @@
                     Reserve
                 </a>
                 <a
-                    href="{{ config('therentcar.whatsapp_appended_phone') }}"
+                    href="{{ generateWhatsAppLink(vehicle: $vehicle) }}"
+                    target="_blank"
                     class="flex items-center justify-center rounded-md bg-slate-900 hover:bg-pr-400 px-3 py-1.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-pr-300">
                     {{ ($view == 'full') ? 'Direct Booking on WhatsApp' : 'Direct WhatsApp' }}
                 </a>

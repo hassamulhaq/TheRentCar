@@ -70,8 +70,11 @@ class VehicleResource extends Resource
                             ->required()
                             ->unique(Vehicle::class, 'slug', fn($record) => $record),
 
-                        TextInput::make('brand')
-                            ->autocomplete(false),
+                        Select::make('brand_id')
+                            ->relationship(name: 'brand', titleAttribute: 'name')
+                            ->searchable(['name'])
+                            ->preload()
+                            ->native(false),
 
                         TextInput::make('model')
                             ->autocomplete(false),
@@ -188,7 +191,7 @@ class VehicleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->query(Vehicle::query()->with('media'))
+            ->query(Vehicle::query()->with(['media' , 'brand']))
             ->columns([
 
                 ImageColumn::make('media')
@@ -203,7 +206,9 @@ class VehicleResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('brand'),
+                TextColumn::make('brands')
+                    ->label('Brand')
+                    ->getStateUsing(fn($record) => $record?->brand?->name ?? 'N/A'),
 
                 TextColumn::make('model'),
 
@@ -217,14 +222,14 @@ class VehicleResource extends Resource
 
                 /*TextColumn::make('status'),*/
 
-                IconColumn::make('status')
-                    ->boolean()
-                    ->trueColor('info')
-                    ->falseColor('warning'),
+                    IconColumn::make('status')
+                        ->boolean()
+                        ->trueColor('info')
+                        ->falseColor('warning'),
 
-                TextColumn::make('short_description'),
+                /*TextColumn::make('short_description'),*/
 
-                TextColumn::make('long_description'),
+                /*TextColumn::make('long_description'),*/
 
                 TextColumn::make('manual_or_auto'),
 

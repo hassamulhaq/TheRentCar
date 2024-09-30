@@ -11,7 +11,7 @@ class VehicleRequest extends FormRequest
         return [
             'title' => ['required'],
             'slug' => ['required'],
-            'brand' => ['nullable'],
+            'brand_id' => ['nullable'],
             'model' => ['nullable'],
             'engine' => ['nullable'],
             'price_per_day' => ['required'],
