@@ -42,6 +42,12 @@ new class extends Component
             </div>
 
             <!-- Settings Dropdown -->
+            @if(auth()->guest())
+                <x-nav-link :href="route('login')" :active="request()->routeIs('login')" wire:navigate>
+                    {{ __('Login') }}
+                </x-nav-link>
+            @endif
+
             @auth
                 <div class="hidden sm:flex sm:items-center sm:ms-6">
                     <x-dropdown align="right" width="48">
