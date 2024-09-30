@@ -35,7 +35,7 @@ new class extends Component
                             {{ __('Dashboard') }}
                         </x-nav-link>
                     @endauth
-                    <x-nav-link :href="route('vehicle-list')" :active="request()->routeIs('vehicle-list')" wire:navigate>
+                    <x-nav-link :href="route('vehicles.list')" :active="request()->routeIs('vehicles.list')" wire:navigate>
                         {{ __('Vehicles') }}
                     </x-nav-link>
                 </div>

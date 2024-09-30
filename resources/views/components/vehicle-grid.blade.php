@@ -16,7 +16,7 @@
                    wire:model.live.debounce="search"
                    placeholder="Search vehicles..." />
         </div>
-        <a href="{{ route('vehicle-list') }}" wire:navigate>
+        <a href="{{ route('vehicles.list') }}" wire:navigate>
             <button class="border-2 border-pr-400 text-black w-16 p-1 rounded-md hover:bg-pr-400 hover:text-white">
                 See All
             </button>

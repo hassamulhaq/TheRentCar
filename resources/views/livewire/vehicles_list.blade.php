@@ -14,7 +14,7 @@
                         Renting a car is easier than ever! With a wide selection, competitive prices, and a simple booking process, we make your experience hassle-free. Whether it’s a weekend trip or a long journey, our 24/7 customer service is here to help. Choose us for a seamless ride!
                     </p>
                     <div class="flex justify-center md:justify-start gap-2 py-3">
-                        <a href="{{ route('vehicle-list') }}" wire:navigate>
+                        <a href="{{ route('vehicles.list') }}" wire:navigate>
                             <button class="border-2 border-pr-400 text-black w-32 p-2 rounded-md hover:bg-sec-400">
                                 Available Cars
                             </button>

@@ -13,17 +13,18 @@ Route::view('dashboard', 'dashboard')
 
 
 Route::group([
-    'middleware' => ['guest']
+    'as' => 'vehicles.',
 ], function () {
-    Route::get('vehicles', \App\Livewire\VehicleListPage::class)
-        ->name('vehicle-list');
+    Route::get('/vehicles', \App\Livewire\VehicleListPage::class)
+        ->name('list');
 
-    Route::get('vehicles/{vehicle:slug}', \App\Livewire\VehicleView::class)
-        ->name('vehicles.view');
+    Route::get('/{vehicle:slug}', \App\Livewire\VehicleView::class)
+        ->name('view');
 
-    Route::get('reservation/{vehicle}', function () {
+    Route::get('reservation/{vehicle:slug}', function () {
+        // Implementation will be added soon
         dd('will be implemented soon');
-    })->name('vehicle.reservation');
+    })->name('reservation');
 });
 
 Route::view('profile', 'profile')
