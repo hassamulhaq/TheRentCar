@@ -30,6 +30,8 @@ new #[Layout('layouts.guest')] class extends Component
 
         event(new Registered($user = User::create($validated)));
 
+        $user->syncRoles([\App\Enums\Permission\RoleEnum::ROLE_USER_LABEL]);
+
         Auth::login($user);
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);

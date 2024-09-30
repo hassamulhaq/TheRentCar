@@ -43,9 +43,14 @@ new class extends Component
 
             <!-- Settings Dropdown -->
             @if(auth()->guest())
-                <x-nav-link :href="route('login')" :active="request()->routeIs('login')" wire:navigate>
-                    {{ __('Login') }}
-                </x-nav-link>
+                <div class="flex items-center justify-center">
+                    <x-nav-link :href="route('register')" :active="request()->routeIs('register')" wire:navigate>
+                        {{ __('Register') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('login')" :active="request()->routeIs('login')" wire:navigate>
+                        {{ __('Login') }}
+                    </x-nav-link>
+                </div>
             @endif
 
             @auth
@@ -67,6 +72,12 @@ new class extends Component
                             <x-dropdown-link :href="route('profile')" wire:navigate>
                                 {{ __('Profile') }}
                             </x-dropdown-link>
+
+                            @if(auth()->user()->hasRole(\App\Enums\Permission\RoleEnum::ROLE_SUPER_ADMIN_LABEL))
+                                <x-responsive-nav-link href="/admin" wire:navigate>
+                                    {{ __('Backend Panel') }}
+                                </x-responsive-nav-link>
+                            @endif
 
                             <!-- Authentication -->
                             <button wire:click="logout" class="w-full text-start">

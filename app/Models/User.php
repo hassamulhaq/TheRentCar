@@ -4,12 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Althinect\FilamentSpatieRolesPermissions\Concerns\HasSuperAdmin;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable, HasRoles, HasSuperAdmin;
 
@@ -50,5 +52,21 @@ class User extends Authenticatable
     public function vehicles(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Vehicle::class);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($panel->getId() === 'admin') {
+            if ($this->hasRole(\App\Enums\Permission\RoleEnum::ROLE_SUPER_ADMIN_LABEL)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false; // Default to false if panel is not 'admin'
     }
 }
