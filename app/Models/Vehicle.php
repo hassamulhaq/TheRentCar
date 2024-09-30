@@ -59,7 +59,6 @@ class Vehicle extends Model implements HasMedia
         if (!empty($search)) {
             $query->where(function (Builder $query) use ($search) {
                 $query->where('title', 'like', '%' . $search . '%')
-                    ->orWhere('brand', 'like', '%' . $search . '%')
                     ->orWhere('model', 'like', '%' . $search . '%')
                     ->orWhere('price_per_day', 'like', '%' . $search . '%')
                     ->orWhere('manual_or_auto', 'like', '%' . $search . '%')
