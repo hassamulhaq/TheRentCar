@@ -12,6 +12,10 @@
                 : 'relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-dashed border-gray-200 bg-white shadow-sm hover:drop-shadow-md';
 @endphp
 
+<x-slot name="seo">
+    {!! seo() !!}
+</x-slot>
+
 @push('js_after')
     <script type="module">
         swiperVehicle();
