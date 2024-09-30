@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -44,5 +45,24 @@ class Vehicle extends Model implements HasMedia
     public function currency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public static function searchVehicles($search)
+    {
+        $query = self::query()->with('media');
+
+        if (!empty($search)) {
+            $query->where(function (Builder $query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('brand', 'like', '%' . $search . '%')
+                    ->orWhere('model', 'like', '%' . $search . '%')
+                    ->orWhere('price_per_day', 'like', '%' . $search . '%')
+                    ->orWhere('manual_or_auto', 'like', '%' . $search . '%')
+                    ->orWhere('unique_number', 'like', '%' . $search . '%')
+                    ->orWhere('number_of_seats', 'like', '%' . $search . '%');
+            });
+        }
+
+        return $query;
     }
 }

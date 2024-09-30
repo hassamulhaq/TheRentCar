@@ -1,11 +1,23 @@
 @props([
-    'vehicle' => null
+    'vehicle' => null,
+    'view' => 'card', // card, full
+    'short_description_preview' => false,
+    'long_description_preview' => false,
 ])
 
-<div
-    class="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-dashed border-gray-200 bg-white shadow-sm hover:drop-shadow-md">
-    <a class="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-        href="{{ route('vehicles.view', ['vehicle' => $vehicle->slug]) }}">
+
+@php
+    $classes = ($view == 'full')
+                ? 'block w-full bg-white shadow-sm rounded-lg border border-dashed border-gray-200'
+                : 'relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-dashed border-gray-200 bg-white shadow-sm hover:drop-shadow-md';
+@endphp
+
+
+<div {{ $attributes->merge(['class' => $classes]) }}>
+    <a
+        href="{{ route('vehicles.view', ['vehicle' => $vehicle->slug]) }}"
+        class="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
+        wire:navigate>
         <img
             loading="lazy"
             class="object-contain w-full h-full"
@@ -14,16 +26,20 @@
             <span class="absolute top-0 left-0 m-2 rounded-full bg-pr-400 px-2 text-center text-sm font-medium text-white">{{ $vehicle->discounted_price ?? '0' }}% OFF</span>
         @endif
     </a>
-    <div class="mt-4 px-4 pb-5 flex flex-grow flex-col justify-between">
+    <div {{ $attributes->merge(['class' => 'mt-4 px-4 pb-5 flex flex-grow flex-col justify-between']) }}>
         <div class="">
             <div class="flex items-center justify-between">
                 <h2 class="font-medium text-2xl">
                     <a
                         href="{{ route('vehicles.view', ['vehicle' => $vehicle->slug]) }}"
-                        class="hover:text-pr-600">{{ $vehicle->title }}</a>
+                        class="hover:text-pr-600"
+                        wire:navigate>{{ $vehicle->title }}</a>
                 </h2>
                 <h2><small>Model: </small>{{ $vehicle->model ?? '' }}</h2>
             </div>
+            @if($short_description_preview)
+                <p class="text-sm text-gray-600 mt-2">{{ $vehicle->short_description ?? '' }}</p>
+            @endif
             <div>
                 <span class="tracking-tight text-slate-900 text-sm">
                     <span>
@@ -76,7 +92,7 @@
                     </div>
                 @endif
             </div>
-            <div class="flex justify-between items-center gap-2">
+            <div class="flex items-center gap-2 {{ ($view == 'full') ? 'justify-end' : 'justify-between' }}">
                 <a href="{{ route('vehicle.reservation', ['vehicle' => $vehicle->id]) }}"
                    class="flex items-center justify-center rounded-md bg-slate-900 hover:bg-pr-400 px-3 py-1.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-pr-300">
                     {{--<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -87,9 +103,13 @@
                 <a
                     href="{{ config('therentcar.whatsapp_appended_phone') }}"
                     class="flex items-center justify-center rounded-md bg-slate-900 hover:bg-pr-400 px-3 py-1.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-pr-300">
-                    Direct WhatsApp
+                    {{ ($view == 'full') ? 'Direct Booking on WhatsApp' : 'Direct WhatsApp' }}
                 </a>
             </div>
         </div>
+        @if($long_description_preview)
+            <hr class="mt-3">
+            <p class="text-sm text-gray-600 mt-2">{!! $vehicle->long_description ?? '' !!}</p>
+        @endif
     </div>
 </div>

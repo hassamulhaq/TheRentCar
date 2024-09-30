@@ -4,9 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 //Route::view('/', 'welcome');
 
-Route::get('/', function () {
-    return view('vehicles.index');
-})->name('vehicles.index');
+Route::get('/', \App\Livewire\VehicleList::class)
+    ->name('app.home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -14,16 +13,16 @@ Route::view('dashboard', 'dashboard')
 
 
 Route::group([
-    'middleware' => ['auth', 'verified']
+    'middleware' => ['guest']
 ], function () {
-    Route::get('vehicles', \App\Livewire\VehicleList::class)
-        ->name('vehicles');
+    Route::get('vehicles', \App\Livewire\VehicleListPage::class)
+        ->name('vehicle-list');
 
-    Route::get('vehicles/{vehicle:slug}', [\App\Http\Controllers\VehicleController::class, 'show'])
+    Route::get('vehicles/{vehicle:slug}', \App\Livewire\VehicleView::class)
         ->name('vehicles.view');
 
     Route::get('reservation/{vehicle}', function () {
-        dd('oooo');
+        dd('will be implemented soon');
     })->name('vehicle.reservation');
 });
 

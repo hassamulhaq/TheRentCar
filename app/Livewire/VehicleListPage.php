@@ -6,7 +6,7 @@ use App\Models\Vehicle;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class VehicleList extends Component
+class VehicleListPage extends Component
 {
     use WithPagination;
 
@@ -22,7 +22,7 @@ class VehicleList extends Component
         $vehicles = Vehicle::searchVehicles($this->search)
             ->paginate(30);
 
-        return view('livewire.vehicles_list', [
+        return view('livewire.vehicle-list-page', [
             'vehicles' => $vehicles,
         ])->layout('layouts.app');
     }
