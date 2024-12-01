@@ -10,7 +10,10 @@ window.scrollToTop = scrollToTop;
 
 function swiperVehicle() {
     const slider = document.querySelector('.vehicle-swiper');
-    const columnWrapper = slider.querySelector('.swiper-wrapper');
+    const columnWrapper = slider?.querySelector('.swiper-wrapper');
+
+    if (!columnWrapper)
+        return;
 
     const progressCircle = document.querySelector(".autoplay-progress svg");
     const progressContent = document.querySelector(".autoplay-progress span");
