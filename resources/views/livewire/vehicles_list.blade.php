@@ -2,35 +2,39 @@
     <div class="bg-sec-100 ">
         {{-- hero --}}
         <div class="">
-            <div class="flex justify-center md:py-12 py-8 mx-auto max-w-screen-xl">
+            <div class="flex justify-center md:pt-4 py-3 mx-auto max-w-screen-xl">
                 <div class="flex flex-col justify-center md:w-3/5  mx-12 md:ms-20 md:mx-0">
-                    <h1 class=" md:text-start text-center  font-car font-bold text-gray-900 mb-8  md:text-7xl text-4xl ">
+                    <h1 class="md:text-start text-center font-car font-bold text-gray-900 mb-2 md:text-6xl text-4xl ">
                         <span class="text-pr-400">EASY</span> WAY TO RENT A CAR
                     </h1>
-                    <div class="md:w-3/5 md:hidden  ">
-                        <img loading="lazy" src="{{ asset('assets/media/home_car.webp') }}" alt="home car">
-                    </div>
-                    <p class="text-justify md:mx-0 mx-8 ">
+                    <p class="text-justify md:mx-0 mx-8" style="line-height: 18px;">
                         Renting a car is easier than ever! With a wide selection, competitive prices, and a simple booking process, we make your experience hassle-free. Whether it’s a weekend trip or a long journey, our 24/7 customer service is here to help. Choose us for a seamless ride!
                     </p>
-                    <div class="flex justify-center md:justify-start gap-2 py-3">
+                    <div class="flex justify-center md:justify-start gap-2 py-1">
                         <a href="{{ route('vehicles.list') }}" wire:navigate>
-                            <button class="border-2 border-pr-400 text-black w-32 p-2 rounded-md hover:bg-sec-400">
+                            <button class="border-2 border-pr-400 text-black w-32 p-1.5 rounded-md hover:bg-sec-400">
                                 Available Cars
                             </button>
                         </a>
-                        <a href="javascript:void(0)">
-                            <button class="border-2 border-pr-400 text-black w-32 p-2 rounded-md hover:bg-sec-400">
+                        <a href="tel:{{ config('therentcar.whatsapp_number') }}">
+                            <button class="border-2 border-pr-400 text-black w-32 p-1.5 rounded-md hover:bg-sec-400">
                                 CONTACT US
                             </button>
                         </a>
                     </div>
                 </div>
-                <div class="md:w-3/5 hidden md:block  ">
-                    <img loading="lazy" src="{{ asset('assets/media/home_car.webp') }}" alt="home car">
+                <div class="md:w-3/5 hidden md:flex md:justify-end">
+                    <img loading="lazy" class="h-24 md:h-60" src="{{ asset('assets/media/home_car.webp') }}" alt="home car">
                 </div>
             </div>
-            <x-vehicle-grid :vehicles="$vehicles" />
+            <x-vehicle-grid
+                :vehicles="$vehicles"
+                :models="$models"
+                :brands="$brands"
+                :categories="$categories"
+                :categories="$categories"
+                :manualOrAutoOptions="$manualOrAutoOptions"
+            />
         </div>
 
         {{-- Our numbers section --}}

@@ -52,12 +52,41 @@ class Vehicle extends Model implements HasMedia
         return $this->belongsTo(Brand::class);
     }
 
-    public static function searchVehicles($search)
+    public static function searchVehicles(array $filters)
     {
-        $query = self::query()->with(['media', 'brand']);
+        $query = self::query()->with(['media', 'brand', 'category', 'currency']);
 
-        if (!empty($search)) {
-            $query->where(function (Builder $query) use ($search) {
+        $query->where(function (Builder $query) use ($filters) {
+            $query->when($filters['model'], function (Builder $query, $model) {
+                $query->where('model', '=', $model);
+            });
+
+            $query->when($filters['brand'], function (Builder $query, $brand) {
+                $query->whereHas('brand', function (Builder $query) use ($brand) {
+                    $query->where('id', '=', $brand);
+                });
+            });
+
+            $query->when($filters['category'], function (Builder $query, $category) {
+                $query->whereHas('category', function (Builder $query) use ($category) {
+                    $query->where('id', '=', $category);
+                });
+            });
+
+            $query->when($filters['noOfSeat'], function (Builder $query, $noOfSeat) {
+                $query->where('number_of_seats', '<=', $noOfSeat);
+            });
+
+            $query->when($filters['perDayPrice'], function (Builder $query, $perDayPrice) {
+                $query->where('price_per_day', '=', $perDayPrice);
+            });
+
+            $query->when($filters['manualOrAuto'], function (Builder $query, $manualOrAuto) {
+                $query->where('manual_or_auto', '=', $manualOrAuto);
+            });
+
+            // Global search filter
+            $query->when($filters['search'], function (Builder $query, $search) {
                 $query->where('title', 'like', '%' . $search . '%')
                     ->orWhere('model', 'like', '%' . $search . '%')
                     ->orWhere('price_per_day', 'like', '%' . $search . '%')
@@ -65,7 +94,7 @@ class Vehicle extends Model implements HasMedia
                     ->orWhere('unique_number', 'like', '%' . $search . '%')
                     ->orWhere('number_of_seats', 'like', '%' . $search . '%');
             });
-        }
+        });
 
         return $query;
     }

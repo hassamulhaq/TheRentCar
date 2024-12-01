@@ -1,1 +1,8 @@
-<x-vehicle-grid :vehicles="$vehicles" />
+<x-vehicle-grid
+    :vehicles="$vehicles"
+    :models="$models"
+    :brands="$brands"
+    :categories="$categories"
+    :categories="$categories"
+    :manualOrAutoOptions="$manualOrAutoOptions"
+/>
