@@ -16,16 +16,14 @@
     </div>
     <div class="">
         <div class="filters bg-gray-100 rounded-md pt-1.5 pb-2">
-            <div class="flex justify-end p-1">
-                <div class="flex gap-4">
-                    <input type="text"
-                           class="rounded p-1.5 w-[300px]"
-                           wire:model.live.debounce="search"
-                           placeholder="Search vehicles..."/>
-                </div>
+            <div class="flex md:justify-end p-1">
+                <input type="text"
+                   class="rounded p-1.5 w-full md:w-[300px]"
+                   wire:model.live.debounce="search"
+                   placeholder="Search vehicles..."/>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 p-1.5 lg:flex lg:gap-1.5 lg:justify-end mt-1.5">
+            <div class="flex flex-wrap gap-1.5 p-1.5 md:justify-end mt-1.5">
                 <!-- Model filter dropdown -->
                 <select wire:model="model" class="rounded p-1.5 w-[140px]">
                     <option value="">Select Model</option>

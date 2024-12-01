@@ -3,7 +3,7 @@
         {{-- hero --}}
         <div class="">
             <div class="flex justify-center md:pt-4 py-3 mx-auto max-w-screen-xl">
-                <div class="flex flex-col justify-center md:w-3/5  mx-12 md:ms-20 md:mx-0">
+                <div class="flex flex-col justify-center md:w-3/5  mx-3 md:ms-20 md:mx-0">
                     <h1 class="md:text-start text-center font-car font-bold text-gray-900 mb-2 md:text-6xl text-4xl ">
                         <span class="text-pr-400">EASY</span> WAY TO RENT A CAR
                     </h1>
